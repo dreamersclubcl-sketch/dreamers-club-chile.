@@ -1357,11 +1357,12 @@ dreamersclubcl@gmail.com`;
 *N° DE PEDIDO: ${orderNumber || '#DC-1001'}*
 *Detalles del pedido:*
 - Cliente: ${formData.nombre} ${formData.apellido}
+- Correo Electrónico: ${formData.correo}
+- Teléfono: ${formData.telefono}
 - Modelo: ${formData.modelo} (x${formData.cantidad})
 - Monto Total: $${totalPrice.toLocaleString('es-CL')} CLP
-- Teléfono: ${formData.telefono}
 - Dirección de Despacho: ${formData.direccion}, ${formData.comuna}, ${formData.region}
-- Agencia de Envío: ${formData.agenciaEnvio}${receiptFile ? `\n- Comprobante Adjunto: ${receiptFile.name}` : ''}`;
+- Agencia de Envío: ${formData.agenciaEnvio}`;
 
     return `https://wa.me/56957937798?text=${encodeURIComponent(msg)}`;
   };
@@ -1759,81 +1760,40 @@ dreamersclubcl@gmail.com`;
           </div>
         )}
 
-        {/* STEP 3: RECEIPT SUBMISSION */}
+        {/* STEP 3: RECEIPT SUBMISSION & WHATSAPP ATTACHMENT INSTRUCTIONS */}
         {step === 3 && (
-          <div className="space-y-6 text-center">
-            <div className="p-8 rounded-2xl glass-panel border border-emerald-500/30 space-y-4">
-              <div className="w-12 h-12 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <i data-lucide="check-circle" className="w-6 h-6"></i>
+          <div className="space-y-5 text-center">
+            <div className="p-6 rounded-2xl glass-panel border border-white/30 space-y-3">
+              <div className="w-12 h-12 mx-auto rounded-full bg-white/10 text-white border border-white/30 flex items-center justify-center">
+                <i data-lucide="check-circle" className="w-6 h-6 text-white"></i>
               </div>
-              <h4 className="text-xl font-bold text-white">¡Reserva Registrada Exitosamente!</h4>
-              <p className="text-xs text-gray-300 font-light max-w-md mx-auto leading-relaxed">
-                Para validar inmediatamente tu pedido y enviar tu código de seguimiento, sube tu comprobante a continuación o envíalo directamente a nuestro WhatsApp oficial: <strong className="text-white font-mono-custom">+56957937798</strong>
+              <h4 className="text-xl sm:text-2xl font-black text-white uppercase font-streetwear">¡Reserva Registrada Exitosamente!</h4>
+              <p className="text-xs text-gray-300 font-light max-w-md mx-auto leading-relaxed font-mono-custom">
+                Tu número de pedido <strong className="text-white bg-white/20 px-2 py-0.5 rounded font-mono-custom">{orderNumber}</strong> ha sido reservado.
               </p>
             </div>
 
-            {/* Functional Receipt File Dropzone */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept="image/*,.pdf"
-              className="hidden"
-            />
-
-            {!receiptFile ? (
-              <div
-                onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`p-6 rounded-2xl border-2 border-dashed transition-all cursor-pointer text-center space-y-2 ${
-                  isDragging
-                    ? 'border-white bg-white/10 scale-105'
-                    : 'border-white/30 hover:border-white bg-[#121218]'
-                }`}
-              >
-                <i data-lucide="upload-cloud" className="w-8 h-8 mx-auto text-white"></i>
-                <span className="text-xs font-bold text-white block">Arrastra aquí tu comprobante de pago</span>
-                <span className="text-[10px] text-gray-400 block">o haz clic para seleccionar archivo desde tu dispositivo (JPG, PNG, PDF)</span>
+            {/* HIGH-IMPACT EYE-CATCHING ATTACHMENT WARNING BANNER */}
+            <div className="p-5 rounded-2xl bg-amber-500/10 border-2 border-amber-400/80 space-y-2 text-left shadow-2xl">
+              <div className="flex items-center gap-2 text-amber-300 font-black text-sm uppercase tracking-wider font-mono-custom">
+                <i data-lucide="alert-triangle" className="w-5 h-5 text-amber-400 shrink-0"></i>
+                <span>⚠️ PASO OBLIGATORIO AL ABRIR WHATSAPP:</span>
               </div>
-            ) : (
-              <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 flex items-center justify-between text-left shadow-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                    <i data-lucide="file-check" className="w-5 h-5"></i>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-white block truncate max-w-[200px] sm:max-w-xs">{receiptFile.name}</span>
-                    <span className="text-[10px] text-emerald-400 font-mono-custom block">
-                      {(receiptFile.size / 1024).toFixed(1)} KB • Adjuntado correctamente
-                    </span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setReceiptFile(null)}
-                  className="text-xs text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition-colors"
-                >
-                  Cambiar
-                </button>
-              </div>
-            )}
+              <p className="text-xs text-amber-100 font-bold leading-relaxed font-mono-custom">
+                Al presionar el botón verde abajo y abrirse tu chat de WhatsApp, debes <span className="bg-amber-400 text-black px-1.5 py-0.5 rounded font-black uppercase">ADJUNTAR LA FOTO DE TU COMPROBANTE</span> haciendo clic en el botón de clip <span className="text-base">📎</span> o cámara <span className="text-base">📷</span>.
+              </p>
+            </div>
 
             <div className="pt-2 space-y-3">
               <a
                 href={getWhatsAppURL()}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg transition-all"
+                className="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl transition-all border border-emerald-400"
               >
                 <i data-lucide="message-circle" className="w-5 h-5"></i>
-                Enviar Comprobante a WhatsApp (+56957937798)
+                Enviar Datos y Comprobante a WhatsApp (+56957937798)
               </a>
-
-              <p className="text-[11px] text-gray-300 font-mono-custom bg-black/80 p-3 rounded-xl border border-white/20 text-center leading-relaxed">
-                💡 <strong className="text-white">Instrucción Final:</strong> Al abrirse el chat de WhatsApp, pulsa el ícono de clip 📎 (o cámara 📷) para adjuntar la foto o captura de tu comprobante.
-              </p>
 
               <button
                 onClick={onClose}
