@@ -1135,21 +1135,25 @@ const CheckoutModal = ({ isOpen, onClose, initialItem }) => {
 
     // Send automatic notification email in background to dreamersclubcl@gmail.com
     try {
-      fetch('https://formspree.io/f/mqakpyqo', {
+      fetch('https://formsubmit.co/ajax/dreamersclubcl@gmail.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({
           _subject: `📦 NUEVO INTENTO DE PAGO / PEDIDO ${assignedNum} - ${formData.nombre} ${formData.apellido}`,
-          orderNumber: assignedNum,
-          cliente: `${formData.nombre} ${formData.apellido}`,
-          correo: formData.correo,
-          telefono: formData.telefono,
-          modelo: formData.modelo,
-          cantidad: formData.cantidad,
-          montoTotal: `$${totalPrice.toLocaleString('es-CL')} CLP`,
-          agenciaEnvio: formData.agenciaEnvio,
-          direccionDespacho: `${formData.direccion}, ${formData.comuna}, ${formData.region}`,
-          fecha: new Date().toLocaleString('es-CL'),
+          _captcha: 'false',
+          _replyto: formData.correo,
+          'NUMERO DE PEDIDO': assignedNum,
+          'CLIENTE': `${formData.nombre} ${formData.apellido}`,
+          'CORREO CLIENTE': formData.correo,
+          'TELEFONO WHATSAPP': formData.telefono,
+          'PRODUCTO/MODELO': `${formData.modelo} (x${formData.cantidad})`,
+          'MONTO TOTAL': `$${totalPrice.toLocaleString('es-CL')} CLP`,
+          'AGENCIA DE ENVIO': formData.agenciaEnvio,
+          'DIRECCION DE DESPACHO': `${formData.direccion}, ${formData.comuna}, ${formData.region}`,
+          'FECHA DE REGISTRO': new Date().toLocaleString('es-CL'),
         }),
       }).catch(() => {});
     } catch (err) {}
