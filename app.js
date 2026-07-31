@@ -1265,6 +1265,46 @@ const CheckoutModal = ({ isOpen, onClose, initialItem }) => {
     }
   };
 
+  const getEstimatedShippingCost = (comunaName, regionName, agency) => {
+    const com = (comunaName || '').toLowerCase().trim();
+    const reg = (regionName || '').toLowerCase().trim();
+
+    // 1. Same origin or neighboring urban RM comunas (Lo Prado, Quinta Normal, Pudahuel, Estación Central, Santiago...)
+    const urbanRM = ['lo prado', 'quinta normal', 'pudahuel', 'cerro navia', 'estación central', 'estacion central', 'santiago', 'providencia', 'las condes', 'vitacura', 'ñunoa', 'ñuñoa', 'la florida', 'maipú', 'maipu', 'san miguel', 'macul', 'la reina', 'peñalolén', 'penalolen', 'recoleta', 'independencia', 'conchalí', 'conchali', 'quilicura', 'san joaquín', 'san joaquin', 'la cisterna', 'el bosquecillo', 'lo espejo', 'pedro aguirre cerda', 'san ramón', 'san ramon', 'la granja', 'huechuraba', 'cerrillos', 'renca', 'lo barnechea', 'padre hurtado', 'san bernardo', 'puente alto'];
+    
+    // 2. Outer RM Rural Comunas
+    const outerRM = ['colina', 'lampa', 'tiltil', 'til til', 'buin', 'paine', 'pirque', 'san josé de maipo', 'san jose de maipo', 'talagante', 'peñaflor', 'penalflor', 'isla de maipo', 'el monte', 'melipilla', 'curacaví', 'curacavi', 'maria pinto', 'maría pinto', 'san pedro', 'calera de tango'];
+
+    const isUrbanRM = urbanRM.some(u => com.includes(u)) || (reg.includes('metropolitana') && !outerRM.some(o => com.includes(o)));
+    const isOuterRM = outerRM.some(o => com.includes(o));
+
+    const isNearZone = reg.includes('valparaíso') || reg.includes('valparaiso') || reg.includes('o\'higgins') || reg.includes('maule');
+    const isMidZone = reg.includes('biobío') || reg.includes('biobio') || reg.includes('coquimbo') || reg.includes('ñuble') || reg.includes('nuble') || reg.includes('araucanía') || reg.includes('araucania');
+    const isFarNorth = reg.includes('arica') || reg.includes('tarapacá') || reg.includes('tarapaca') || reg.includes('antofagasta') || reg.includes('atacama');
+    const isFarSouth = reg.includes('magallanes') || reg.includes('aysén') || reg.includes('aysen') || reg.includes('los lagos') || reg.includes('los ríos') || reg.includes('los rios');
+
+    if (agency === 'BlueExpress') {
+      if (com.includes('lo prado')) return '$3.500 ~ $4.200 CLP (Local RM • 3kg)';
+      if (isUrbanRM) return '$3.800 ~ $4.600 CLP (Urbano RM • 3kg)';
+      if (isOuterRM) return '$4.600 ~ $5.400 CLP (Periferia RM • 3kg)';
+      if (isNearZone) return '$5.200 ~ $6.300 CLP (Zona Central • 3kg)';
+      if (isMidZone) return '$6.400 ~ $7.800 CLP (Zona Sur/Norte • 3kg)';
+      if (isFarNorth) return '$8.900 ~ $11.500 CLP (Norte Distante • 3kg)';
+      if (isFarSouth) return '$9.500 ~ $12.900 CLP (Sur Extremo • 3kg)';
+      return '$5.400 ~ $6.900 CLP (3kg)';
+    } else {
+      // Starken
+      if (com.includes('lo prado')) return '$3.900 ~ $4.500 CLP (Local RM • 3kg)';
+      if (isUrbanRM) return '$4.200 ~ $5.100 CLP (Urbano RM • 3kg)';
+      if (isOuterRM) return '$4.900 ~ $5.900 CLP (Periferia RM • 3kg)';
+      if (isNearZone) return '$5.700 ~ $6.900 CLP (Zona Central • 3kg)';
+      if (isMidZone) return '$6.900 ~ $8.400 CLP (Zona Sur/Norte • 3kg)';
+      if (isFarNorth) return '$9.800 ~ $12.800 CLP (Norte Distante • 3kg)';
+      if (isFarSouth) return '$10.500 ~ $14.200 CLP (Sur Extremo • 3kg)';
+      return '$5.900 ~ $7.500 CLP (3kg)';
+    }
+  };
+
   const handleSelectSuggestion = (sug) => {
     const matchedRegion = ALL_CHILEAN_COMUNAS.find(c => c.name.toLowerCase() === sug.comuna.toLowerCase())?.region || sug.region;
     setFormData(prev => ({
@@ -1371,6 +1411,7 @@ dreamersclubcl@gmail.com`;
               onSubmit={handleStep1Submit}
               className="space-y-3 sm:space-y-4 pt-1"
             >
+              {/* 1. Nombre & Apellido */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="text-xs text-gray-300 font-medium block mb-1">Nombre *</label>
@@ -1398,155 +1439,187 @@ dreamersclubcl@gmail.com`;
                 </div>
               </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-gray-300 font-medium block mb-1">Correo Electrónico *</label>
-                <input
-                  type="email"
-                  required
-                  name="correo"
-                  value={formData.correo}
-                  onChange={handleChange}
-                  placeholder="tu@correo.cl"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-300 font-medium block mb-1">Teléfono WhatsApp *</label>
-                <input
-                  type="tel"
-                  required
-                  name="telefono"
-                  value={formData.telefono}
-                  onChange={handleChange}
-                  placeholder="+56 9 1234 5678"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
-                />
-              </div>
-            </div>
-
-            {/* DIRECCIÓN CON AUTOCOMPLETADO DE TODO CHILE */}
-            <div className="relative">
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs text-gray-300 font-medium">Dirección de Despacho *</label>
-                <span className="text-[10px] text-gray-400 font-mono-custom flex items-center gap-1">
-                  <i data-lucide="map" className="w-3 h-3 text-white"></i> Cobertura Nacional Chile
-                </span>
-              </div>
-
-              <input
-                type="text"
-                required
-                name="direccion"
-                value={formData.direccion}
-                onChange={handleAddressInputChange}
-                onFocus={() => formData.direccion.length >= 2 && setShowSuggestions(true)}
-                placeholder="Escribe tu calle, pasaje o avenida (ej: Condell, Providencia, Pedro de Valdivia...)"
-                className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
-              />
-
-              {/* Autocomplete Dropdown List Overlay */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1 z-[100] bg-[#121218] border border-white/40 rounded-2xl shadow-2xl overflow-hidden max-h-64 overflow-y-auto">
-                  <div className="p-2 bg-black/60 border-b border-white/10 text-[10px] font-mono-custom text-gray-400 text-left px-3">
-                    📍 DIRECCIONES ENCONTRADAS EN CHILE (Haz clic para autocompletar):
-                  </div>
-                  {suggestions.map((item, idx) => (
-                    <div
-                      key={idx}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        handleSelectSuggestion(item);
-                      }}
-                      className="p-3.5 hover:bg-white/20 cursor-pointer border-b border-white/10 last:border-0 flex items-start gap-3 text-xs transition-colors bg-[#121218] text-left"
-                    >
-                      <i data-lucide="map-pin" className="w-4 h-4 text-white shrink-0 mt-0.5"></i>
-                      <div>
-                        <span className="font-bold text-white block">{item.street}</span>
-                        <span className="text-[11px] text-gray-300 font-mono-custom">
-                          Comuna: <strong className="text-white">{item.comuna}</strong> • {item.region}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+              {/* 2. Correo & Teléfono */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-300 font-medium block mb-1">Correo Electrónico *</label>
+                  <input
+                    type="email"
+                    required
+                    name="correo"
+                    value={formData.correo}
+                    onChange={handleChange}
+                    placeholder="tu@correo.cl"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
+                  />
                 </div>
-              )}
-            </div>
+                <div>
+                  <label className="text-xs text-gray-300 font-medium block mb-1">Teléfono WhatsApp *</label>
+                  <input
+                    type="tel"
+                    required
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleChange}
+                    placeholder="+56 9 1234 5678"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
+                  />
+                </div>
+              </div>
 
-            {/* COMUNA Y SELECCIÓN DE LAS 16 REGIONES DE CHILE */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+              {/* 3. Dirección de Despacho */}
+              <div className="relative">
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs text-gray-300 font-medium">Comuna *</label>
-                  <span className="text-[10px] text-gray-400 font-mono-custom">Todas las comunas de Chile</span>
+                  <label className="text-xs text-gray-300 font-medium">Dirección de Despacho *</label>
+                  <span className="text-[10px] text-gray-400 font-mono-custom flex items-center gap-1">
+                    <i data-lucide="map" className="w-3 h-3 text-white"></i> Cobertura Nacional Chile
+                  </span>
                 </div>
+
                 <input
                   type="text"
                   required
-                  name="comuna"
-                  list="chilean-comunas-datalist"
-                  value={formData.comuna}
-                  onChange={handleComunaInputChange}
-                  placeholder="Escribe o selecciona tu comuna (ej: Providencia, Las Condes, Viña del Mar...)"
+                  name="direccion"
+                  value={formData.direccion}
+                  onChange={handleAddressInputChange}
+                  onFocus={() => formData.direccion.length >= 2 && setShowSuggestions(true)}
+                  placeholder="Escribe tu calle, pasaje o avenida (ej: Condell, Providencia, Pedro de Valdivia...)"
                   className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
                 />
-                <datalist id="chilean-comunas-datalist">
-                  {ALL_CHILEAN_COMUNAS.map((c, cIdx) => (
-                    <option key={cIdx} value={c.name}>
-                      {c.name} ({c.region})
-                    </option>
-                  ))}
-                </datalist>
+
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full mt-1 z-[100] bg-[#121218] border border-white/40 rounded-2xl shadow-2xl overflow-hidden max-h-64 overflow-y-auto">
+                    <div className="p-2 bg-black/60 border-b border-white/10 text-[10px] font-mono-custom text-gray-400 text-left px-3">
+                      📍 DIRECCIONES ENCONTRADAS EN CHILE (Haz clic para autocompletar):
+                    </div>
+                    {suggestions.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          handleSelectSuggestion(item);
+                        }}
+                        className="p-3.5 hover:bg-white/20 cursor-pointer border-b border-white/10 last:border-0 flex items-start gap-3 text-xs transition-colors bg-[#121218] text-left"
+                      >
+                        <i data-lucide="map-pin" className="w-4 h-4 text-white shrink-0 mt-0.5"></i>
+                        <div>
+                          <span className="font-bold text-white block">{item.street}</span>
+                          <span className="text-[11px] text-gray-300 font-mono-custom">
+                            Comuna: <strong className="text-white">{item.comuna}</strong> • {item.region}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div>
-                <label className="text-xs text-gray-300 font-medium block mb-1">Región (Chile) *</label>
-                <select
-                  name="region"
-                  value={formData.region}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none cursor-pointer"
-                >
-                  {CHILE_REGIONS.map((reg, rIdx) => (
-                    <option key={rIdx} value={reg} className="bg-black text-white">
-                      {reg}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+              {/* 4. Comuna & Región */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs text-gray-300 font-medium">Comuna *</label>
+                    <span className="text-[10px] text-gray-400 font-mono-custom">Todas las comunas de Chile</span>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    name="comuna"
+                    list="chilean-comunas-datalist"
+                    value={formData.comuna}
+                    onChange={handleComunaInputChange}
+                    placeholder="Escribe o selecciona tu comuna (ej: Lo Prado, Providencia...)"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none"
+                  />
+                  <datalist id="chilean-comunas-datalist">
+                    {ALL_CHILEAN_COMUNAS.map((c, cIdx) => (
+                      <option key={cIdx} value={c.name}>
+                        {c.name} ({c.region})
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
 
-            {/* SELECCIÓN DE AGENCIA DE ENVÍO */}
-            <div>
-              <label className="text-xs text-gray-300 font-medium block mb-1.5">Agencia de Envío *</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, agenciaEnvio: 'BlueExpress' })}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
-                    formData.agenciaEnvio === 'BlueExpress'
-                      ? 'bg-white text-black border-white shadow-md shadow-white/20'
-                      : 'bg-[#121218] border-white/15 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <i data-lucide="truck" className="w-4 h-4"></i>
-                  BlueExpress
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, agenciaEnvio: 'Starken' })}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 ${
-                    formData.agenciaEnvio === 'Starken'
-                      ? 'bg-white text-black border-white shadow-md shadow-white/20'
-                      : 'bg-[#121218] border-white/15 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <i data-lucide="package" className="w-4 h-4"></i>
-                  Starken
-                </button>
+                <div>
+                  <label className="text-xs text-gray-300 font-medium block mb-1">Región (Chile) *</label>
+                  <select
+                    name="region"
+                    value={formData.region}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#121218] border border-white/15 text-white text-sm focus:border-white focus:outline-none cursor-pointer"
+                  >
+                    {CHILE_REGIONS.map((reg, rIdx) => (
+                      <option key={rIdx} value={reg} className="bg-black text-white">
+                        {reg}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
+
+              {/* 5. Selección de Agencia y Recuadro Valor Estimado de Envío Por Pagar */}
+              <div className="p-3.5 rounded-2xl bg-[#121218] border border-white/30 space-y-3 text-left shadow-lg mt-3">
+                <div className="flex justify-between items-center border-b border-white/15 pb-2">
+                  <label className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 font-mono-custom">
+                    <i data-lucide="truck" className="w-4 h-4 text-white"></i>
+                    Agencia de Envío Preferida *
+                  </label>
+                  <span className="text-[10px] font-mono-custom text-emerald-400 font-bold uppercase">POR PAGAR EN DESTINO</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, agenciaEnvio: 'BlueExpress' })}
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                      formData.agenciaEnvio === 'BlueExpress'
+                        ? 'bg-white text-black border-white shadow-md shadow-white/20'
+                        : 'bg-[#08080C] border-white/15 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <i data-lucide="truck" className="w-4 h-4"></i> BlueExpress
+                    </span>
+                    <span className="text-[10px] font-mono-custom opacity-80">Despacho 24/48h</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, agenciaEnvio: 'Starken' })}
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                      formData.agenciaEnvio === 'Starken'
+                        ? 'bg-white text-black border-white shadow-md shadow-white/20'
+                        : 'bg-[#08080C] border-white/15 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <i data-lucide="package" className="w-4 h-4"></i> Starken
+                    </span>
+                    <span className="text-[10px] font-mono-custom opacity-80">Cobertura Nacional</span>
+                  </button>
+                </div>
+
+                {/* Recuadro Destacado Valor Estimado */}
+                <div className="p-3 rounded-xl bg-black/90 border border-white/20 space-y-1.5 text-xs font-mono-custom shadow-inner">
+                  <div className="flex justify-between items-center text-[11px] text-gray-400 border-b border-white/10 pb-1">
+                    <span>📍 Origen: <strong className="text-white">Lo Prado (Santiago)</strong></span>
+                    <span>➔ Destino: <strong className="text-white">{formData.comuna || 'Tu Comuna'}</strong></span>
+                  </div>
+                  <div className="flex justify-between items-center pt-1">
+                    <span className="text-gray-200 text-xs font-bold">
+                      🚚 VALOR ESTIMADO DE ENVÍO POR PAGAR:
+                    </span>
+                    <span className="text-emerald-400 font-bold font-mono-custom text-sm sm:text-base">
+                      {getEstimatedShippingCost(formData.comuna, formData.region, formData.agenciaEnvio)}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-[10px] text-gray-400 font-mono-custom text-center leading-tight">
+                  * El valor del envío es solo un estimado según distancia desde Lo Prado y se paga al recibir tu paquete en {formData.agenciaEnvio}.
+                </p>
+              </div>
+
+
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div>
@@ -1757,6 +1830,10 @@ dreamersclubcl@gmail.com`;
                 <i data-lucide="message-circle" className="w-5 h-5"></i>
                 Enviar Comprobante a WhatsApp (+56957937798)
               </a>
+
+              <p className="text-[11px] text-gray-300 font-mono-custom bg-black/80 p-3 rounded-xl border border-white/20 text-center leading-relaxed">
+                💡 <strong className="text-white">Instrucción Final:</strong> Al abrirse el chat de WhatsApp, pulsa el ícono de clip 📎 (o cámara 📷) para adjuntar la foto o captura de tu comprobante.
+              </p>
 
               <button
                 onClick={onClose}
