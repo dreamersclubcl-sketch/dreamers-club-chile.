@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DREAMERS CLUB | Limited Dreams. Unlimited Legacy.</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Dreamers Club - Colección exclusiva de gorras streetwear de lujo en Chile. Edición estrictamente limitada de 120 unidades seriadas. El lujo encuentra propósito." />
+  <meta name="keywords" content="Dreamers Club, streetwear chile, gorras exclusivas, ropa de lujo, streetwear premium, Syna World, Corteiz, Represent, Fear of God" />
+  <meta name="author" content="DREAMERS CLUB" />
+  
+  <!-- Open Graph / Social Media Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="DREAMERS CLUB | Limited Dreams. Unlimited Legacy." />
+  <meta property="og:description" content="Gorras premium de edición limitada para quienes crean tendencias. Despachos a todo Chile en 24/48h." />
+  <meta property="og:image" content="https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377804/WJEI4888_vuksu4.jpg" />
+  <meta property="og:image:secure_url" content="https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377804/WJEI4888_vuksu4.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card Preview -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DREAMERS CLUB | Limited Dreams. Unlimited Legacy." />
+  <meta name="twitter:description" content="Gorras premium de edición limitada para quienes crean tendencias. Despachos a todo Chile en 24/48h." />
+  <meta name="twitter:image" content="https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377804/WJEI4888_vuksu4.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377804/WJEI4888_vuksu4.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Playfair+Display:ital,wght@1,400;1,600;1,700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#0D0D12',
+            'obsidian-dark': '#07070A',
+            'slate-dark': '#16161E',
+            'slate-border': '#2A2A35',
+            gold: '#C9A84C',
+            'gold-light': '#F3D379',
+            'gold-dark': '#8C7026',
+            ivory: '#FAF8F5',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- React 18 & Babel Standalone (Cloudflare High-Speed CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.10/babel.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-[#07070A] text-white selection:bg-[#C9A84C] selection:text-black antialiased">
+  <div id="root"></div>
+
+  <!-- Load Main React Application Script -->
+  <script type="text/babel" data-presets="react" src="app.js"></script>
+</body>
+</html>
