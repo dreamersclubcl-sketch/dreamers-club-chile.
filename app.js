@@ -1615,8 +1615,8 @@ dreamersclubcl@gmail.com`;
                     </span>
                   </div>
                 </div>
-                <p className="text-[10px] text-gray-400 font-mono-custom text-center leading-tight">
-                  * El valor del envío es solo un estimado según distancia desde Lo Prado y se paga al recibir tu paquete en {formData.agenciaEnvio}.
+                <p className="text-[10px] text-gray-300 font-mono-custom text-center leading-tight pt-0.5">
+                  * El valor del envío es solo un estimado según distancia y se paga al recibir tu paquete en {formData.agenciaEnvio}.
                 </p>
               </div>
 
