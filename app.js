@@ -82,15 +82,15 @@ const Navbar = ({ onOpenCheckout }) => {
       }`}>
         {/* Brand Logo with Custom Cloudinary Logo Image & Streetwear Font */}
         <a href="#" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-full overflow-hidden border border-white/40 shadow-md group-hover:scale-105 transition-transform bg-black flex items-center justify-center">
+          <div className="w-9 h-9 rounded-full overflow-hidden border border-white/50 shadow-lg group-hover:scale-105 transition-transform bg-black flex items-center justify-center shrink-0">
             <img
               src="https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377804/WJEI4888_vuksu4.jpg"
               alt="Dreamers Club Logo"
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="font-streetwear text-base sm:text-lg font-black tracking-widest text-white group-hover:text-gray-300 transition-colors uppercase">
-            DREAMERS<span className="text-gray-400 font-light ml-1">CLUB</span>
+          <span className="font-streetwear-brand text-xs sm:text-base font-extrabold tracking-[0.22em] text-white uppercase group-hover:text-gray-200 transition-colors">
+            DREAMERS<span className="text-black bg-white px-2 py-0.5 rounded font-extrabold ml-1.5 text-[10px] sm:text-xs tracking-widest inline-block shadow-md">CLUB</span>
           </span>
         </a>
 
@@ -389,10 +389,17 @@ const OfferSection = ({ onOpenCheckout }) => {
 
 // --- PRODUCT VIEWER (HEADER IMAGE + DROP 001 ONLY DREAMERS) ---
 const ProductViewer = ({ onOpenCheckout }) => {
+  const capImages = [
+    'https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377812/OGYL0625_ewafwi.jpg',
+    'https://res.cloudinary.com/uhj4l0sp/image/upload/v1785457694/0d08e257-b428-4440-8e9b-acb3bc35c996_ogfpc1.png',
+    'https://res.cloudinary.com/uhj4l0sp/image/upload/v1785435425/FIAGE7944_xrx6es.jpg'
+  ];
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
   const current = {
     name: 'DROP 001 ONLY DREAMERS',
     price: '$35.990 CLP',
-    image: 'https://res.cloudinary.com/uhj4l0sp/image/upload/v1785377812/OGYL0625_ewafwi.jpg',
+    image: capImages[activeImgIndex],
     badge: 'Bestseller Drop 001',
     desc: 'Bordado frontal exclusivo DROP 001 ONLY DREAMERS con acabado deluxe y piedreria de calidad.',
   };
@@ -433,23 +440,43 @@ const ProductViewer = ({ onOpenCheckout }) => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: Dynamic Viewer with Ambient Tonal Glow Aura */}
-          <div className="relative rounded-3xl p-2 sm:p-4 overflow-visible flex items-center justify-center">
-            {/* Multi-layered Ambient Tonal Aura Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-[95%] rounded-full bg-gradient-to-tr from-white/40 via-gray-300/30 to-white/20 filter blur-3xl pointer-events-none opacity-90 animate-pulse"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-white/20 filter blur-2xl pointer-events-none"></div>
+          {/* Left: Dynamic Viewer with Dual Image Gallery & Ambient Tonal Glow Aura */}
+          <div className="flex flex-col items-center gap-4 w-full">
+            <div className="relative w-full rounded-3xl p-2 sm:p-4 overflow-visible flex items-center justify-center">
+              {/* Multi-layered Ambient Tonal Aura Glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-[95%] rounded-full bg-gradient-to-tr from-white/40 via-gray-300/30 to-white/20 filter blur-3xl pointer-events-none opacity-90 animate-pulse"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-white/20 filter blur-2xl pointer-events-none"></div>
 
-            <div className="relative w-full h-[420px] sm:h-[500px] rounded-3xl overflow-hidden glass-panel border border-white/40 shadow-[0_0_60px_rgba(255,255,255,0.3)] z-10 p-2 group bg-black">
-              <div className="absolute top-4 left-4 z-20 px-3.5 py-1 rounded-full bg-black/90 backdrop-blur-md border border-white/50 text-white font-mono-custom text-xs shadow-lg">
-                {current.badge}
+              <div className="relative w-full h-[380px] sm:h-[480px] rounded-3xl overflow-hidden glass-panel border border-white/40 shadow-[0_0_60px_rgba(255,255,255,0.3)] z-10 p-2 group bg-black">
+                <div className="absolute top-4 left-4 z-20 px-3.5 py-1 rounded-full bg-black/90 backdrop-blur-md border border-white/50 text-white font-mono-custom text-xs shadow-lg">
+                  {current.badge}
+                </div>
+
+                <img
+                  src={current.image}
+                  alt={current.name}
+                  className="w-full h-full object-cover rounded-2xl filter brightness-105 contrast-105 transform group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
               </div>
+            </div>
 
-              <img
-                src={current.image}
-                alt={current.name}
-                className="w-full h-full object-cover rounded-2xl filter brightness-105 contrast-105 transform group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+            {/* Interactive Dual-Image Thumbnails Selector */}
+            <div className="flex justify-center items-center gap-3 z-20">
+              {capImages.map((imgUrl, imgIdx) => (
+                <button
+                  key={imgIdx}
+                  onClick={() => setActiveImgIndex(imgIdx)}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-black cursor-pointer ${
+                    activeImgIndex === imgIdx
+                      ? 'border-white scale-105 shadow-xl white-glow-sm'
+                      : 'border-white/20 opacity-60 hover:opacity-100 hover:border-white/50'
+                  }`}
+                  title={`Ver foto ${imgIdx + 1}`}
+                >
+                  <img src={imgUrl} alt={`Vista ${imgIdx + 1}`} className="w-full h-full object-cover rounded-xl" />
+                </button>
+              ))}
             </div>
           </div>
 

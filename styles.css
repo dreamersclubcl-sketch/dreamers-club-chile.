@@ -1,5 +1,5 @@
 /* DREAMERS CLUB - PURE BLACK & WHITE LUXURY STREETWEAR STYLESHEET */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Playfair+Display:ital,wght@1,400;1,600;1,700&family=UnifrakturMaguntia&family=Cinzel:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&family=Syncopate:wght@700;800&display=swap');
 
 :root {
   --color-obsidian: #0D0D12;
@@ -10,9 +10,9 @@
   --color-gray-light: #E5E5E7;
   --color-gray-muted: #8E8E93;
   --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  --font-serif: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-streetwear: 'Cinzel', 'JetBrains Mono', sans-serif;
+  --font-streetwear: 'Syncopate', 'Outfit', sans-serif;
 }
 
 * {
@@ -21,12 +21,29 @@
   padding: 0;
 }
 
-html {
+html, body, #root {
   scroll-behavior: smooth;
-  background-color: var(--color-obsidian-dark);
+  background-color: #000000;
   color: var(--color-white);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+.font-streetwear-brand {
+  font-family: 'Syncopate', 'Outfit', 'Inter', sans-serif;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.font-streetwear-bold {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 /* Custom Scrollbar */
